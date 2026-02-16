@@ -1,0 +1,32 @@
+<form id="loginForm">
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button type="submit">Ingresar</button>
+</form>
+
+<script>
+    document.getElementById('loginForm').onsubmit = async (e) => {
+        e.preventDefault();
+        
+        // Lógica de fetch para enviar credenciales y guardar el JWT en localStorage
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            localStorage.setItem('token', data.token);
+            window.location.href = '/products'; // Redirigir a la página de productos
+        } else {
+            alert('Error al iniciar sesión');
+        }
+    };
+</script>
